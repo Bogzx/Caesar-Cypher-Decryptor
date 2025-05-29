@@ -1,4 +1,3 @@
-
 # Caesar Cipher Encryptor, Decryptor & Analyzer  cryptool
 
 [![Language: C](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
@@ -149,15 +148,5 @@ The "distance" or "similarity" between two frequency distributions (vectors of 2
 * **Chi-squared Distance ($ \chi^2 $):** A statistical test that measures how well the observed frequencies (from the potentially decrypted text) fit the expected frequencies (from `distribution.txt`). Lower values indicate a better fit.
 * **Euclidean Distance:** The straight-line distance between the two frequency vectors in 26-dimensional space. Lower values mean the distributions are more similar.
 * **Cosine Distance:** Calculates the cosine of the angle between the two frequency vectors. Cosine similarity is 1 if vectors are identical, 0 if orthogonal. Cosine distance is `1 - Cosine Similarity`. Lower distance values indicate more similarity.
-
-## 💡 Future Enhancements
-
-* Option to save encrypted/decrypted text to a file.
-* Support for other simple substitution ciphers (e.g., affine cipher).
-* Analysis of n-grams (digrams, trigrams) for more robust cryptanalysis.
-* Automatic language detection based on frequency profiles.
-* Graphical User Interface (GUI).
-
----
 
 Enjoy using the Caesar Cipher tool!
