@@ -5,7 +5,7 @@
 #include <math.h>
 
 #define ALPHABET_SIZE 26
-#define MAX_TEXT_LENGTH 10000
+#define MAX_TEXT_LENGTH 100000
 #define TOP_N 3
 
 // Function to read the distribution of letters from a file
