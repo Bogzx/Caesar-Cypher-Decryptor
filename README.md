@@ -147,11 +147,8 @@ A Caesar cipher merely shifts these frequencies. By comparing the frequency dist
 The "distance" or "similarity" between two frequency distributions (vectors of 26 numbers) is measured by:
 
 * **Chi-squared Distance ($ \chi^2 $):** A statistical test that measures how well the observed frequencies (from the potentially decrypted text) fit the expected frequencies (from `distribution.txt`). Lower values indicate a better fit.
-  $ \chi^2 = \sum_{i=1}^{N} \frac{(O_i - E_i)^2}{E_i} $
 * **Euclidean Distance:** The straight-line distance between the two frequency vectors in 26-dimensional space. Lower values mean the distributions are more similar.
-  $ D = \sqrt{\sum_{i=1}^{N} (hist1_i - hist2_i)^2} $
 * **Cosine Distance:** Calculates the cosine of the angle between the two frequency vectors. Cosine similarity is 1 if vectors are identical, 0 if orthogonal. Cosine distance is `1 - Cosine Similarity`. Lower distance values indicate more similarity.
-  $ \text{Cosine Distance} = 1 - \frac{\sum_{i=1}^{N} hist1_i \cdot hist2_i}{\sqrt{\sum_{i=1}^{N} hist1_i^2} \cdot \sqrt{\sum_{i=1}^{N} hist2_i^2}} $
 
 ## 💡 Future Enhancements
 
