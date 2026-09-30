@@ -40,9 +40,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\Administrator\Documents\GitHub\Caesar-Cypher-Decryptor\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Administrator\Documents\GitHub\Caesar-Cypher-Decryptor\distribution.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Administrator\Documents\GitHub\Caesar-Cypher-Decryptor\README.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "distribution.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "README.md"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]

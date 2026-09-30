@@ -1,5 +1,6 @@
 # Caesar Cipher Encryptor, Decryptor & Analyzer  cryptool
 
+[![CI](https://github.com/Bogzx/Caesar-Cypher-Decryptor/actions/workflows/ci.yml/badge.svg)](https://github.com/Bogzx/Caesar-Cypher-Decryptor/actions/workflows/ci.yml)
 [![Language: C](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
 
 A command-line tool written in C to perform Caesar cipher encryption, decryption, and frequency analysis-based cryptanalysis. This program allows users to work with text from keyboard input or files, and employs statistical methods to attempt to break unknown Caesar ciphers.
@@ -37,26 +38,33 @@ A command-line tool written in C to perform Caesar cipher encryption, decryption
 
 ### Compilation
 
-1. Save the code as `caesar_cipher.c` (or any other `.c` filename).
-2. Open a terminal or command prompt.
-3. Compile the program using a C compiler. With GCC, the command is:
+Clone the repository and build with `make` (or call the compiler directly):
 
-   ```bash
-   gcc caesar_cipher.c -o caesar_cipher -lm
-   ```
+```bash
+git clone https://github.com/Bogzx/Caesar-Cypher-Decryptor.git
+cd Caesar-Cypher-Decryptor
+make                                  # or: gcc -std=c99 -O2 main.c -o caesar -lm
+```
 
-   * `caesar_cipher.c`: Your C source file.
-   * `-o caesar_cipher`: Specifies the output executable name.
-   * `-lm`: Links the math library (required for `sqrt` in distance calculations).
+`-lm` links the math library, needed for `sqrt` in the distance calculations.
 
 ### Running the Program
 
-1. Once compiled, run the executable from your terminal:
+Run the executable from the repository directory, so it finds `distribution.txt`:
 
-   ```bash
-   ./caesar_cipher
-   ```
-2. You will be greeted with the main menu.
+```bash
+./caesar
+```
+
+You will be greeted with the main menu. Enter `0` or press `Ctrl+D` (end of input) to exit.
+
+### Running the Tests
+
+```bash
+make test
+```
+
+This drives the menu through stdin and checks encryption, decryption, all three cipher-breaking metrics and input handling.
 
 ## 📖 How to Use
 
@@ -68,12 +76,13 @@ The program operates via a numerical menu. Enter the number corresponding to you
 * It should contain 26 floating-point numbers, each on a new line, representing the expected frequencies of the letters 'a' through 'z' in the target language (e.g., English).
 * Example format for `distribution.txt`:
   ```
-  0.08167  // Frequency of 'a'
-  0.01492  // Frequency of 'b'
+  0.08167
+  0.01492
   ...
-  0.00074  // Frequency of 'z'
+  0.00074
   ```
-* If this file is not present when the program starts, it will attempt to create a `distribution.txt` with default approximate English letter frequencies.
+  (the first line is the frequency of 'a', the last of 'z'; comments are not allowed).
+* If this file is not present when a cipher is broken, the program uses built-in approximate English letter frequencies and writes them to `distribution.txt`.
 
 ### Menu Options
 
@@ -81,22 +90,20 @@ The program operates via a numerical menu. Enter the number corresponding to you
 
    * Prompts you to enter text directly into the console.
    * This text is stored as the "loaded text".
-   * Any previously encrypted/decrypted text buffers are cleared.
+   * The previously encrypted text is cleared.
 2. **Read text from file:**
 
    * Prompts you for a filename.
    * Reads the content of the specified file into the "loaded text".
-   * Any previously encrypted/decrypted text buffers are cleared.
+   * The previously encrypted text is cleared.
 3. **Encrypt loaded text with a specific shift:**
 
    * Requires text to be loaded first (via option 1 or 2).
    * Prompts for an encryption shift value (0-25).
-   * The "loaded text" is encrypted, and the result is stored as the "encrypted/target text".
+   * The "loaded text" is encrypted, and the result is stored as the "encrypted text".
 4. **Decrypt text with a known shift:**
 
-   * If no "encrypted/target text" exists but "loaded text" does, it will offer to use the "loaded text" for decryption.
-   * Otherwise, if "encrypted/target text" exists, it will use that.
-   * If neither exists, it will prompt you to enter the ciphertext.
+   * Prompts for the ciphertext. Press Enter on an empty line to use the last "encrypted text", or, if there is none, the "loaded text".
    * Prompts for the decryption shift value (0-25).
    * Displays the decrypted text.
 5. **Display letter frequency distribution of loaded text:**
@@ -108,15 +115,16 @@ The program operates via a numerical menu. Enter the number corresponding to you
 8. **Break cipher using Cosine distance:**
 
    * These options attempt to automatically decrypt a Caesar cipher.
-   * **Input Text Priority:**
-     1. If "encrypted/target text" exists (e.g., from option 3 or a previous break/decrypt attempt), it will be used.
-     2. Else, if "loaded text" exists (from option 1 or 2, and "encrypted/target text" is empty), the "loaded text" will be copied as the target for breaking.
-     3. Else (if both are empty), you will be prompted to enter the ciphertext.
+   * **Input Text Priority:** you are prompted for the ciphertext. On an empty line:
+     1. If "encrypted text" exists (from option 3 or a previous decrypt/break), it is used.
+     2. Else, the "loaded text" (from option 1 or 2) is used.
    * The program compares the letter frequencies of the input text (shifted by all 26 possibilities) against the standard frequencies from `distribution.txt` using the chosen distance metric.
    * It then prints the Top N (default 3) most probable encryption shifts and the corresponding decrypted plaintexts. A smaller distance indicates a higher likelihood.
-9. **Exit:**
+0. **Exit:**
 
    * Terminates the program.
+
+Only the ASCII letters `a-z`/`A-Z` are shifted and counted; digits, punctuation and non-ASCII characters (e.g. `é`, `ă`) are left unchanged.
 
 ### Workflow Examples
 
@@ -129,14 +137,13 @@ The program operates via a numerical menu. Enter the number corresponding to you
 
   1. Ensure `distribution.txt` is present or allow the program to create it.
   2. Choose option `2` to load your ciphertext file (e.g., `unknown_cipher.txt`).
-  3. Choose option `6`, `7`, or `8`.
+  3. Choose option `6`, `7`, or `8` and press Enter on the empty prompt to use the loaded text.
   4. Review the suggested decryptions.
 * **Breaking a cipher pasted in:**
 
-  1. Ensure `distribution.txt` is present.
-  2. Choose option `6` (or `7`, `8`).
-  3. When prompted (if no text is loaded/encrypted), paste your ciphertext.
-  4. Review suggestions.
+  1. Choose option `6` (or `7`, `8`).
+  2. When prompted, paste your ciphertext.
+  3. Review suggestions.
 
 ## 📊 Frequency Analysis & Distance Metrics
 
