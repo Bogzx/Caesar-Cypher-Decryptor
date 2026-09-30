@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with warnings as errors
+        run: make CFLAGS="-std=c99 -Wall -Wextra -Wpedantic -Werror -O2"
+      - name: Test
+        run: make test
+      - name: Test with sanitizers
+        if: runner.os == 'Linux'
+        run: |
+          make clean
+          make test CFLAGS="-std=c99 -O1 -g -fsanitize=address,undefined -fno-sanitize-recover=all"
