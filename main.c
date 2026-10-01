@@ -287,6 +287,10 @@ int read_text_from_file(char *text, const char *filename) {
     
     size_t chars_read = fread(text, sizeof(char), MAX_TEXT_LENGTH - 1, file);
     text[chars_read] = '\0';
+    if (chars_read == MAX_TEXT_LENGTH - 1 && fgetc(file) != EOF) {
+        printf("Warning: %s is longer than %d characters; only the first %d were read.\n",
+               filename, MAX_TEXT_LENGTH - 1, MAX_TEXT_LENGTH - 1);
+    }
     
     fclose(file);
     return 1;
