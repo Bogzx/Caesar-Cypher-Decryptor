@@ -13,8 +13,9 @@ cd "$WORK" || exit 1
 PLAIN="The quick brown fox jumps over the lazy dog while the old farmer watches from the barn and eats his breakfast"
 failures=0
 
-# Guard against infinite loops where `timeout` exists (not on stock macOS)
-if command -v timeout >/dev/null 2>&1; then TIMEOUT="timeout 5"; else TIMEOUT=""; fi
+# Guard against infinite loops where `timeout` exists (not on stock macOS).
+# Sanitizer builds start slowly on some machines: raise it with TEST_TIMEOUT=30.
+if command -v timeout >/dev/null 2>&1; then TIMEOUT="timeout ${TEST_TIMEOUT:-5}"; else TIMEOUT=""; fi
 
 # run NAME INPUT EXPECTED — pipe INPUT into the program and grep its output for EXPECTED
 run() {
@@ -47,6 +48,17 @@ run "invalid choice" "abc\n0\n" "Invalid choice"
 run "invalid shift" "1\nabc\n3\n99\n0\n" "Invalid shift"
 run "EOF exits instead of looping" "1\nabc\n" "End of input"
 run "EOF mid-prompt exits" "4\n" "End of input"
+
+# A file longer than the buffer is truncated, and says so.
+awk 'BEGIN { for (i = 0; i < 11000; i++) printf "abcdefghij" }' > long.txt
+run "long file is truncated with a warning" "2\nlong.txt\n0\n" "only the first 99999 were read"
+printf 'abcdefghij' > short.txt
+out=$(printf '2\nshort.txt\n0\n' | $TIMEOUT "$BIN" 2>&1)
+if printf '%s' "$out" | grep -q "Warning"; then
+    echo "FAIL short file must not warn"; failures=$((failures + 1))
+else
+    echo "ok   short file is read without a warning"
+fi
 
 rm -f distribution.txt
 run "missing distribution.txt falls back to defaults" "6\nAol xbpjr iyvdu mve qbtwz vcly aol shgf kvn\n0\n" "1. Encryption Shift = 7,"

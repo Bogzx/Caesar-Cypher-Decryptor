@@ -1,4 +1,4 @@
-# Caesar Cipher Encryptor, Decryptor & Analyzer  cryptool
+# Caesar Cipher Encryptor, Decryptor & Analyzer
 
 [![CI](https://github.com/Bogzx/Caesar-Cypher-Decryptor/actions/workflows/ci.yml/badge.svg)](https://github.com/Bogzx/Caesar-Cypher-Decryptor/actions/workflows/ci.yml)
 [![Language: C](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
@@ -58,13 +58,27 @@ Run the executable from the repository directory, so it finds `distribution.txt`
 
 You will be greeted with the main menu. Enter `0` or press `Ctrl+D` (end of input) to exit.
 
+Breaking a ciphertext with option 6 (the shift is unknown; the program ranks all 26):
+
+```
+Enter your choice: 6
+Enter encrypted text: Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn
+Top 3 most likely encryption shifts using Chi-squared distance:
+1. Encryption Shift = 7, Distance = 2.527562
+   Decrypted: The quick brown fox jumps over the lazy dog
+2. Encryption Shift = 13, Distance = 2.912688
+   Decrypted: Nby kocwe vliqh zir dogjm ipyl nby futs xia
+3. Encryption Shift = 19, Distance = 3.089862
+   Decrypted: Hvs eiwqy pfckb tcl xiadg cjsf hvs zonm rcu
+```
+
 ### Running the Tests
 
 ```bash
 make test
 ```
 
-This drives the menu through stdin and checks encryption, decryption, all three cipher-breaking metrics and input handling.
+This drives the menu through stdin and checks encryption, decryption, all three cipher-breaking metrics and input handling. Each case has a 5-second limit; sanitizer builds can start slowly, so CI runs them with `make test TEST_TIMEOUT=30`.
 
 ## 📖 How to Use
 
@@ -94,7 +108,7 @@ The program operates via a numerical menu. Enter the number corresponding to you
 2. **Read text from file:**
 
    * Prompts you for a filename.
-   * Reads the content of the specified file into the "loaded text".
+   * Reads the content of the specified file into the "loaded text" (up to 99,999 characters; a longer file is truncated with a warning).
    * The previously encrypted text is cleared.
 3. **Encrypt loaded text with a specific shift:**
 
